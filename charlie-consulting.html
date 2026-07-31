@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charlie — Shopify Build &amp; Conversion Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-900:#10151a;
+    --ink-800:#161d24;
+    --ink-700:#1e2731;
+    --paper:#eef0e9;
+    --paper-dim:#dfe2d8;
+    --ink-text:#12161a;
+    --muted-on-ink:#8b96a1;
+    --muted-on-paper:#5b6259;
+    --gold:#e8b34c;
+    --gold-dim:#a97f2f;
+    --sage:#5fa383;
+    --line-on-ink:rgba(255,255,255,0.12);
+    --line-on-paper:rgba(18,22,26,0.16);
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--ink-900);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    margin:0;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{content:"";width:16px;height:1px;background:var(--gold);display:inline-block;}
+  button{font-family:inherit;cursor:pointer;}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(16,21,26,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-on-ink);
+  }
+  .nav-inner{
+    max-width:1120px;margin:0 auto;padding:18px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;font-size:19px;letter-spacing:-0.01em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{width:7px;height:7px;background:var(--gold);border-radius:50%;display:inline-block;}
+  nav.links{display:flex;gap:32px;align-items:center;}
+  nav.links a{
+    font-size:14px;color:var(--muted-on-ink);
+    transition:color .15s ease;
+  }
+  nav.links a:hover{color:var(--paper);}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 20px;
+    font-size:13px;font-weight:600;
+    font-family:'IBM Plex Mono',monospace;
+    letter-spacing:0.02em;
+    border-radius:var(--radius);
+    border:1px solid transparent;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn-gold{background:var(--gold);color:var(--ink-900);}
+  .btn-gold:hover{transform:translateY(-1px);background:#f0c168;}
+  .btn-ghost{border-color:var(--line-on-ink);color:var(--paper);}
+  .btn-ghost:hover{border-color:var(--gold);}
+  .nav-cta{display:none;}
+  @media(min-width:720px){.nav-cta{display:inline-flex;}}
+  @media(max-width:719px){nav.links{display:none;}}
+
+  /* ---------- HERO / RECEIPT ---------- */
+  .hero{padding:88px 0 60px;position:relative;}
+  .hero-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:start;}
+  @media(max-width:880px){.hero-grid{grid-template-columns:1fr;}}
+  .hero h1{
+    font-size:clamp(34px,5vw,58px);
+    line-height:1.05;
+    margin:18px 0 20px;
+    color:var(--paper);
+  }
+  .hero h1 em{font-style:normal;color:var(--gold);}
+  .hero p.lede{font-size:17px;color:var(--muted-on-ink);max-width:480px;margin-bottom:32px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px;}
+  .hero-signals{display:flex;gap:28px;flex-wrap:wrap;}
+  .signal{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted-on-ink);}
+  .signal strong{display:block;color:var(--paper);font-size:20px;font-family:'Space Grotesk',sans-serif;}
+
+  /* receipt card */
+  .receipt{
+    background:var(--paper);
+    color:var(--ink-text);
+    padding:30px 26px 26px;
+    position:relative;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.5);
+    transform:rotate(1.4deg);
+  }
+  .receipt::before, .receipt::after{
+    content:"";position:absolute;left:0;right:0;height:10px;
+    background-image:radial-gradient(circle at 8px 5px, var(--ink-900) 5px, transparent 5.5px);
+    background-size:16px 10px; background-repeat:repeat-x;
+  }
+  .receipt::before{top:-5px;}
+  .receipt::after{bottom:-5px;transform:rotate(180deg);}
+  .receipt-head{
+    text-align:center;border-bottom:1px dashed var(--line-on-paper);
+    padding-bottom:14px;margin-bottom:14px;
+  }
+  .receipt-head .mono{font-size:11px;letter-spacing:0.12em;color:var(--muted-on-paper);}
+  .receipt-head h3{font-size:18px;margin-top:6px;}
+  .rline{
+    display:flex;align-items:baseline;gap:6px;
+    font-family:'IBM Plex Mono',monospace;font-size:13px;
+    margin:9px 0;
+  }
+  .rline .item{white-space:nowrap;color:var(--ink-text);}
+  .rline .fill{flex:1;border-bottom:1px dotted var(--line-on-paper);height:0;transform:translateY(-3px);}
+  .rline .price{white-space:nowrap;font-weight:600;}
+  .rtotal{
+    border-top:1px dashed var(--line-on-paper);margin-top:16px;padding-top:14px;
+    display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;
+    font-size:14px;font-weight:600;
+  }
+  .rtotal .price{color:var(--gold-dim);}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:96px 0;}
+  .section-head{max-width:620px;margin-bottom:52px;}
+  .section-head h2{font-size:clamp(28px,3.4vw,40px);margin-top:16px;}
+  .section-head p{color:var(--muted-on-ink);margin-top:14px;font-size:16px;}
+  section.on-paper{background:var(--paper);color:var(--ink-text);}
+  section.on-paper .eyebrow{color:var(--gold-dim);}
+  section.on-paper .eyebrow::before{background:var(--gold-dim);}
+  section.on-paper .section-head p{color:var(--muted-on-paper);}
+
+  /* ---------- SERVICES (receipt line items, full width) ---------- */
+  .service-list{border-top:1px solid var(--line-on-ink);}
+  .service-row{
+    display:grid;grid-template-columns:52px 1fr auto;gap:22px;align-items:start;
+    padding:28px 0;border-bottom:1px solid var(--line-on-ink);
+  }
+  .service-row .num{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-size:14px;padding-top:4px;}
+  .service-row h3{font-size:21px;margin-bottom:8px;}
+  .service-row p{color:var(--muted-on-ink);font-size:15px;max-width:520px;margin:0;}
+  .service-row .price{
+    font-family:'IBM Plex Mono',monospace;color:var(--paper);font-size:14px;
+    text-align:right;white-space:nowrap;padding-top:4px;
+  }
+  .price .from{display:block;font-size:10px;color:var(--muted-on-ink);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;}
+  @media(max-width:640px){
+    .service-row{grid-template-columns:36px 1fr;}
+    .service-row .price{grid-column:2;text-align:left;padding-top:6px;}
+  }
+
+  /* ---------- PROCESS ---------- */
+  .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-on-paper);border:1px solid var(--line-on-paper);}
+  @media(max-width:820px){.process-grid{grid-template-columns:repeat(2,1fr);}}
+  .process-cell{background:var(--paper);padding:30px 24px;}
+  .process-cell .step-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold-dim);}
+  .process-cell h4{font-size:17px;margin:14px 0 8px;}
+  .process-cell p{font-size:14px;color:var(--muted-on-paper);margin:0;}
+
+  /* ---------- WORK / CASE STUDY ---------- */
+  .case-card{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;
+    border:1px solid var(--line-on-ink);
+    overflow:hidden;
+  }
+  @media(max-width:820px){.case-card{grid-template-columns:1fr;}}
+  .case-visual{
+    background:linear-gradient(145deg,#1c2530,#12171d);
+    min-height:320px;padding:32px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    border-right:1px solid var(--line-on-ink);
+  }
+  @media(max-width:820px){.case-visual{border-right:none;border-bottom:1px solid var(--line-on-ink);}}
+  .browser-chrome{
+    background:var(--ink-800);border:1px solid var(--line-on-ink);border-radius:6px;overflow:hidden;
+  }
+  .browser-bar{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line-on-ink);}
+  .browser-bar span{width:8px;height:8px;border-radius:50%;background:var(--line-on-ink);}
+  .browser-body{padding:22px;}
+  .mock-hero{height:70px;background:linear-gradient(120deg,#2a3542,#1c242c);border-radius:3px;margin-bottom:10px;}
+  .mock-row{display:flex;gap:8px;}
+  .mock-row div{flex:1;height:44px;background:#232d37;border-radius:3px;}
+  .case-content{padding:38px;}
+  .case-content .eyebrow{margin-bottom:16px;}
+  .case-content h3{font-size:24px;margin-bottom:12px;}
+  .case-content p{color:var(--muted-on-ink);font-size:15px;margin-bottom:22px;}
+  .stat-row{display:flex;gap:28px;margin-bottom:26px;flex-wrap:wrap;}
+  .stat-row .signal strong{font-size:22px;}
+
+  /* ---------- PRICING ---------- */
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  @media(max-width:900px){.pricing-grid{grid-template-columns:1fr;}}
+  .plan{
+    background:var(--ink-800);border:1px solid var(--line-on-ink);
+    padding:30px 26px;display:flex;flex-direction:column;
+  }
+  .plan.featured{border-color:var(--gold);position:relative;}
+  .plan.featured::before{
+    content:"MOST BOOKED";position:absolute;top:-1px;right:-1px;
+    background:var(--gold);color:var(--ink-900);font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:0.08em;padding:5px 10px;
+  }
+  .plan .plan-name{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted-on-ink);letter-spacing:0.08em;text-transform:uppercase;}
+  .plan h3{font-size:34px;margin:10px 0 4px;}
+  .plan .plan-sub{font-size:13px;color:var(--muted-on-ink);margin-bottom:22px;}
+  .plan ul{list-style:none;padding:0;margin:0 0 26px;flex:1;}
+  .plan li{
+    font-size:14px;padding:10px 0;border-top:1px dashed var(--line-on-ink);
+    display:flex;gap:10px;
+  }
+  .plan li:first-child{border-top:none;}
+  .plan li::before{content:"—";color:var(--gold);flex-shrink:0;}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:0.8fr 1.2fr;gap:56px;align-items:center;}
+  @media(max-width:820px){.about-grid{grid-template-columns:1fr;}}
+  .about-photo{
+    aspect-ratio:4/5;background:linear-gradient(160deg,#e3dfcf,var(--paper-dim));
+    border:1px solid var(--line-on-paper);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-size:70px;font-weight:700;color:var(--gold-dim);
+  }
+  .about-copy p{font-size:16px;margin-bottom:16px;}
+  .about-copy p:first-of-type{font-size:19px;font-family:'Space Grotesk',sans-serif;font-weight:500;color:var(--ink-text);}
+
+  /* ---------- FAQ ---------- */
+  .faq-item{border-bottom:1px solid var(--line-on-ink);}
+  .faq-q{
+    width:100%;text-align:left;background:none;border:none;color:var(--paper);
+    padding:22px 0;display:flex;justify-content:space-between;align-items:center;
+    font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:500;
+  }
+  .faq-q .plus{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-size:20px;transition:transform .2s ease;}
+  .faq-item.open .plus{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .faq-a p{color:var(--muted-on-ink);font-size:15px;padding-bottom:22px;margin:0;max-width:640px;}
+
+  /* ---------- CONTACT ---------- */
+  .contact-band{
+    background:var(--paper);color:var(--ink-text);
+    padding:80px 0;text-align:center;
+  }
+  .contact-band h2{font-size:clamp(28px,4vw,44px);max-width:720px;margin:16px auto 26px;}
+  .contact-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+  .contact-band .btn-ghost{border-color:var(--line-on-paper);color:var(--ink-text);}
+
+  footer{padding:40px 0;border-top:1px solid var(--line-on-ink);}
+  .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .footer-inner .mono{font-size:12px;color:var(--muted-on-ink);}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo"><span class="dot"></span>Charlie</a>
+    <nav class="links">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#contact" class="btn btn-gold nav-cta">Book a call →</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">Ecommerce · UX · Shopify</span>
+        <h1>Websites that turn<br><em>browsers</em> into buyers.</h1>
+        <p class="lede">I design and build Shopify stores for brands that don't have a website yet — or have one that isn't converting. Clean UX, fast Horizon-based builds, and marketing support once you're live.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-gold">Book a free 20-min call →</a>
+          <a href="#work" class="btn btn-ghost">See the demo store</a>
+        </div>
+        <div class="hero-signals">
+          <div class="signal"><strong>£500</strong>starting build price</div>
+          <div class="signal"><strong>2–4 wks</strong>typical turnaround</div>
+          <div class="signal"><strong>Horizon</strong>theme framework</div>
+        </div>
+      </div>
+
+      <div class="receipt">
+        <div class="receipt-head">
+          <div class="mono">STORE BUILD · RECEIPT</div>
+          <h3>What you're actually paying for</h3>
+        </div>
+        <div class="rline"><span class="item">Homepage design</span><span class="fill"></span><span class="price">✓</span></div>
+        <div class="rline"><span class="item">Product &amp; collection pages</span><span class="fill"></span><span class="price">✓</span></div>
+        <div class="rline"><span class="item">Mobile optimisation</span><span class="fill"></span><span class="price">✓</span></div>
+        <div class="rline"><span class="item">Cart &amp; checkout setup</span><span class="fill"></span><span class="price">✓</span></div>
+        <div class="rline"><span class="item">Speed &amp; Core Web Vitals pass</span><span class="fill"></span><span class="price">✓</span></div>
+        <div class="rtotal"><span>Total</span><span class="price">A store that sells</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Services</span>
+        <h2>Everything a growing store needs, itemised.</h2>
+        <p>Start with a build, add what you need as you grow. No bundled fluff — pick what moves the needle for you right now.</p>
+      </div>
+
+      <div class="service-list">
+        <div class="service-row">
+          <span class="num mono">01</span>
+          <div>
+            <h3>Shopify store build</h3>
+            <p>A full Horizon-based store from scratch — for brands with no website yet, or ones ready to leave a page builder behind.</p>
+          </div>
+          <div class="price"><span class="from">From</span>£500</div>
+        </div>
+        <div class="service-row">
+          <span class="num mono">02</span>
+          <div>
+            <h3>Redesign &amp; UX overhaul</h3>
+            <p>Rebuilding an existing store that looks dated or isn't converting — new layout, clearer navigation, faster checkout path.</p>
+          </div>
+          <div class="price"><span class="from">From</span>£650</div>
+        </div>
+        <div class="service-row">
+          <span class="num mono">03</span>
+          <div>
+            <h3>Conversion &amp; CRO audit</h3>
+            <p>A page-by-page review of where customers drop off, with a prioritised list of fixes — for stores that just need tuning, not a rebuild.</p>
+          </div>
+          <div class="price"><span class="from">From</span>£250</div>
+        </div>
+        <div class="service-row">
+          <span class="num mono">04</span>
+          <div>
+            <h3>Ongoing marketing support</h3>
+            <p>Email flows, landing pages, and on-site promotions to keep traffic converting after launch. Billed monthly, cancel anytime.</p>
+          </div>
+          <div class="price"><span class="from">From</span>£300/mo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="on-paper">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Process</span>
+        <h2>Four steps, start to launch.</h2>
+      </div>
+      <div class="process-grid">
+        <div class="process-cell">
+          <span class="step-num mono">01 — Discovery</span>
+          <h4>Free call</h4>
+          <p>20 minutes on what you sell, who buys it, and what "done" looks like for your store.</p>
+        </div>
+        <div class="process-cell">
+          <span class="step-num mono">02 — Design</span>
+          <h4>Layout &amp; content plan</h4>
+          <p>A homepage and product page layout mapped to your products before any building starts.</p>
+        </div>
+        <div class="process-cell">
+          <span class="step-num mono">03 — Build</span>
+          <h4>Live on a dev store</h4>
+          <p>You get a working link to review and comment on throughout — no surprise reveal at the end.</p>
+        </div>
+        <div class="process-cell">
+          <span class="step-num mono">04 — Launch</span>
+          <h4>Go live &amp; handover</h4>
+          <p>Speed checks, a short walkthrough video, and two weeks of free tweaks after launch.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Featured work</span>
+        <h2>Built on Shopify Horizon.</h2>
+        <p>A live demo store showing the kind of build you'd get — product-first layout, sticky add-to-cart, and a checkout path built for fewer clicks.</p>
+      </div>
+
+      <div class="case-card">
+        <div class="case-visual">
+          <div class="browser-chrome">
+            <div class="browser-bar"><span></span><span></span><span></span></div>
+            <div class="browser-body">
+              <div class="mock-hero"></div>
+              <div class="mock-row"><div></div><div></div><div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="case-content">
+          <span class="eyebrow">Case study</span>
+          <h3>Demo storefront — Horizon theme</h3>
+          <p>A ground-up build showing hero storytelling, shoppable lookbook sections, sticky mobile checkout, and a metaobject-powered size guide — the same components used in client builds.</p>
+          <div class="stat-row">
+            <div class="signal"><strong>&lt;1.2s</strong>load time</div>
+            <div class="signal"><strong>100</strong>mobile PageSpeed</div>
+          </div>
+          <a href="#contact" class="btn btn-ghost">Request the live link →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="on-paper">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Pricing</span>
+        <h2>Three ways to start.</h2>
+        <p>Every build starts on Shopify's free Horizon theme — you're paying for the work, not a theme licence.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="plan">
+          <span class="plan-name mono">Starter</span>
+          <h3>£500</h3>
+          <p class="plan-sub">For brands with no website yet</p>
+          <ul>
+            <li>Homepage + up to 3 product pages</li>
+            <li>Mobile-optimised layout</li>
+            <li>Horizon theme customisation</li>
+            <li>2 weeks post-launch support</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost">Start here</a>
+        </div>
+        <div class="plan featured">
+          <span class="plan-name mono">Growth</span>
+          <h3>£950</h3>
+          <p class="plan-sub">For replacing a basic or DIY site</p>
+          <ul>
+            <li>Everything in Starter</li>
+            <li>Full catalogue &amp; collection setup</li>
+            <li>Cart drawer + upsell prompts</li>
+            <li>Email capture flow</li>
+            <li>4 weeks post-launch support</li>
+          </ul>
+          <a href="#contact" class="btn btn-gold">Most booked</a>
+        </div>
+        <div class="plan">
+          <span class="plan-name mono">Partner</span>
+          <h3>£300<span style="font-size:16px;color:var(--muted-on-paper);">/mo</span></h3>
+          <p class="plan-sub">Ongoing after launch</p>
+          <ul>
+            <li>Monthly CRO tweaks</li>
+            <li>New landing pages as needed</li>
+            <li>Email &amp; promo build-outs</li>
+            <li>Priority response time</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost">Ask about this</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap about-grid">
+      <div class="about-photo">C</div>
+      <div class="about-copy">
+        <p>Hi, I'm Charlie.</p>
+        <p>I build Shopify stores for founders who'd rather be running their business than fighting with a page builder. My focus is simple: clear layouts, fast pages, and checkout flows that don't lose customers halfway through.</p>
+        <p>I work with a small number of clients at a time so every build gets proper attention — from the first call through to the two weeks of tweaks after you go live.</p>
+        <a href="#contact" class="btn btn-gold">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="on-paper">
+    <div class="wrap" style="max-width:760px;">
+      <div class="section-head">
+        <span class="eyebrow">FAQ</span>
+        <h2>Common questions.</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-q">I don't have a Shopify account yet — is that a problem?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Not at all. I'll walk you through setting one up on our first call, and can build on a development store until you're ready to go live.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">What do you need from me to get started?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Product photos and descriptions if you have them, and a rough idea of the brands or stores whose look you like. I'll handle the rest, including copy suggestions if needed.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">How long does a build actually take?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Most Starter builds take 2–3 weeks from kickoff to launch. Growth builds with a larger catalogue typically take 3–4 weeks.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Do you offer ongoing support after launch?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Yes — every package includes free tweaks for a set period after launch, and you can move onto the monthly Partner plan any time after that.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-band">
+    <div class="wrap">
+      <span class="eyebrow" style="justify-content:center;">Get started</span>
+      <h2>Tell me about your store, and let's see if we're a fit.</h2>
+      <div class="contact-actions">
+        <a href="mailto:hello@charlieconsulting.com" class="btn btn-gold">Email hello@charlieconsulting.com</a>
+        <a href="#" class="btn btn-ghost">Book a 20-min call</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <a href="#top" class="logo"><span class="dot"></span>Charlie</a>
+    <span class="mono">© 2026 · Shopify build &amp; conversion consulting</span>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.faq-item');
+      var answer = item.querySelector('.faq-a');
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(function(openItem){
+        if(openItem !== item){
+          openItem.classList.remove('open');
+          openItem.querySelector('.faq-a').style.maxHeight = null;
+        }
+      });
+      if(isOpen){
+        item.classList.remove('open');
+        answer.style.maxHeight = null;
+      } else {
+        item.classList.add('open');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
