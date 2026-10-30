@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Charlie — Shopify Build &amp; Conversion Consulting</title>
+<title>Online Grown For You — Shopify Builds &amp; Conversion Consulting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -283,6 +283,21 @@
   footer{padding:40px 0;border-top:1px solid var(--line-on-ink);}
   .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
   .footer-inner .mono{font-size:12px;color:var(--muted-on-ink);}
+ 
+  /* ---------- CONTRAST FIXES ---------- */
+
+/* Pricing: dark cards need light text */
+.plan{ color:var(--paper); }
+.plan h3{ color:var(--paper); }
+.plan.featured h3{ color:var(--gold); }
+.plan h3 span{ color:var(--muted-on-ink) !important; }
+
+/* FAQ: dark text on the light section */
+section.on-paper .faq-item{ border-bottom:1px solid var(--line-on-paper); }
+section.on-paper .faq-item:first-child{ border-top:1px solid var(--line-on-paper); }
+section.on-paper .faq-q{ color:var(--ink-text); }
+section.on-paper .faq-q .plus{ color:var(--gold-dim); }
+section.on-paper .faq-a p{ color:var(--muted-on-paper); }
 </style>
 </head>
 <body>
@@ -308,7 +323,7 @@
       <div>
         <span class="eyebrow">Ecommerce · UX · Shopify</span>
         <h1>Websites that turn<br><em>browsers</em> into buyers.</h1>
-        <p class="lede">I design and build Shopify stores for brands that don't have a website yet — or have one that isn't converting. Clean UX, fast Horizon-based builds, and marketing support once you're live.</p>
+        <p class="lede">I design and build websites for brands and independent business owners that don't have a website yet — or have one that isn't converting. I offer consulting in ecommerce, technology architecture solutions, and marketing support.</p>
         <div class="hero-actions">
           <a href="#contact" class="btn btn-gold">Book a free 20-min call →</a>
           <a href="#work" class="btn btn-ghost">See the demo store</a>
@@ -349,7 +364,7 @@
           <span class="num mono">01</span>
           <div>
             <h3>Shopify store build</h3>
-            <p>A full Horizon-based store from scratch — for brands with no website yet, or ones ready to leave a page builder behind.</p>
+            <p>A full transactable store from scratch — for brands with no website yet, or ones ready to leave an old one behind.</p>
           </div>
           <div class="price"><span class="from">From</span>£500</div>
         </div>
@@ -375,7 +390,7 @@
             <h3>Ongoing marketing support</h3>
             <p>Email flows, landing pages, and on-site promotions to keep traffic converting after launch. Billed monthly, cancel anytime.</p>
           </div>
-          <div class="price"><span class="from">From</span>£300/mo</div>
+          <div class="price"><span class="from">From</span>£150/hr (retainer packages available)</div>
         </div>
       </div>
     </div>
@@ -407,7 +422,7 @@
         <div class="process-cell">
           <span class="step-num mono">04 — Launch</span>
           <h4>Go live &amp; handover</h4>
-          <p>Speed checks, a short walkthrough video, and two weeks of free tweaks after launch.</p>
+          <p>Speed checks, a short walkthrough video, and two weeks hypercare after launch.</p>
         </div>
       </div>
     </div>
@@ -418,7 +433,7 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Featured work</span>
-        <h2>Built on Shopify Horizon.</h2>
+        <h2>Built on Shopify</h2>
         <p>A live demo store showing the kind of build you'd get — product-first layout, sticky add-to-cart, and a checkout path built for fewer clicks.</p>
       </div>
 
@@ -496,7 +511,7 @@
     </div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- ABOUT 
   <section id="about">
     <div class="wrap about-grid">
       <div class="about-photo">C</div>
@@ -508,7 +523,7 @@
       </div>
     </div>
   </section>
-
+-->
   <!-- FAQ -->
   <section id="faq" class="on-paper">
     <div class="wrap" style="max-width:760px;">
@@ -543,8 +558,8 @@
       <span class="eyebrow" style="justify-content:center;">Get started</span>
       <h2>Tell me about your store, and let's see if we're a fit.</h2>
       <div class="contact-actions">
-        <a href="mailto:hello@charlieconsulting.com" class="btn btn-gold">Email hello@charlieconsulting.com</a>
-        <a href="#" class="btn btn-ghost">Book a 20-min call</a>
+        <a href="mailto:charlie@onlinegrowthforyou.com" class="btn btn-gold">Get in touch</a>
+        <a href="https://calendly.com/onlinegrowthforyou/online-growth-for-you-20-minute-intro" class="btn btn-ghost">Book a free consultation</a>
       </div>
     </div>
   </section>
